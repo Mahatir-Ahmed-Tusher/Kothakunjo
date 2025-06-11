@@ -1,0 +1,204 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Font Classes */
+.font-hind {
+  font-family: 'Hind Siliguri', sans-serif;
+}
+
+.font-solaiman {
+  font-family: 'SolaimanLipi', sans-serif;
+}
+
+/* Light and Dark mode styles */
+.light {
+  color-scheme: light;
+}
+
+.dark {
+  color-scheme: dark;
+}
+
+/* Smooth transitions */
+* {
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(147, 51, 234, 0.5);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(147, 51, 234, 0.7);
+}
+
+/* Glass effect utility */
+.glass {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Gradient text animation */
+@keyframes gradient {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.animate-gradient {
+  background: linear-gradient(-45deg, #f97316, #ec4899, #8b5cf6, #3b82f6, #10b981);
+  background-size: 400% 400%;
+  animation: gradient 15s ease infinite;
+}
+
+.bg-300% {
+  background-size: 300% 300%;
+}
+
+/* Enhanced animations */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(147, 51, 234, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(147, 51, 234, 0.6);
+  }
+}
+
+.animate-glow {
+  animation: glow 3s ease-in-out infinite;
+}
+
+/* Purple light theme and deep violet dark theme */
+.light {
+  --primary-purple: #8b5cf6;
+  --primary-pink: #ec4899;
+  --primary-orange: #f97316;
+  --primary-blue: #3b82f6;
+  --primary-green: #10b981;
+  --accent-yellow: #fbbf24;
+  --accent-red: #ef4444;
+  --accent-cyan: #06b6d4;
+}
+
+.dark {
+  --primary-purple: #7c3aed;
+  --primary-pink: #db2777;
+  --primary-orange: #ea580c;
+  --primary-blue: #2563eb;
+  --primary-green: #059669;
+  --accent-yellow: #f59e0b;
+  --accent-red: #dc2626;
+  --accent-cyan: #0891b2;
+}
+
+/* Enhanced button styles */
+.btn-gradient {
+  background: linear-gradient(135deg, #8b5cf6, #ec4899, #f97316);
+  background-size: 200% 200%;
+  animation: gradient 3s ease infinite;
+}
+
+.btn-gradient:hover {
+  animation-duration: 1s;
+}
+
+/* Enhanced card styles */
+.card-colorful {
+  background: linear-gradient(135deg, 
+    rgba(139, 92, 246, 0.1), 
+    rgba(236, 72, 153, 0.1), 
+    rgba(249, 115, 22, 0.1)
+  );
+  border: 1px solid rgba(139, 92, 246, 0.2);
+}
+
+.card-colorful:hover {
+  background: linear-gradient(135deg, 
+    rgba(139, 92, 246, 0.15), 
+    rgba(236, 72, 153, 0.15), 
+    rgba(249, 115, 22, 0.15)
+  );
+  border-color: rgba(139, 92, 246, 0.3);
+}
+
+/* Text gradient utilities */
+.text-gradient-purple {
+  background: linear-gradient(135deg, #8b5cf6, #a78bfa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-pink {
+  background: linear-gradient(135deg, #ec4899, #f472b6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-orange {
+  background: linear-gradient(135deg, #f97316, #fb923c);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-blue {
+  background: linear-gradient(135deg, #3b82f6, #60a5fa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Enhanced shadow utilities */
+.shadow-colorful {
+  box-shadow: 
+    0 4px 6px -1px rgba(139, 92, 246, 0.1),
+    0 2px 4px -1px rgba(236, 72, 153, 0.1),
+    0 1px 3px 0 rgba(249, 115, 22, 0.1);
+}
+
+.shadow-colorful-lg {
+  box-shadow: 
+    0 10px 15px -3px rgba(139, 92, 246, 0.1),
+    0 4px 6px -2px rgba(236, 72, 153, 0.1),
+    0 2px 4px 0 rgba(249, 115, 22, 0.1);
+}
+
+.shadow-colorful-xl {
+  box-shadow: 
+    0 20px 25px -5px rgba(139, 92, 246, 0.1),
+    0 10px 10px -5px rgba(236, 72, 153, 0.1),
+    0 4px 6px -2px rgba(249, 115, 22, 0.1);
+}
