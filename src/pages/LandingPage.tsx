@@ -185,6 +185,7 @@ const LandingPage: React.FC = () => {
       </div>
 
       {/* Features Section */}
+      
       <div className="py-20 px-4 bg-gradient-to-r from-white/60 to-purple-50/60 dark:from-purple-900/30 dark:to-violet-900/30">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
@@ -217,6 +218,51 @@ const LandingPage: React.FC = () => {
               );
             })}
           </div>
+        </div>
+      </div>
+
+      {/* Download App Section */}
+      <div className="py-12 px-4">
+        <div className="max-w-6xl mx-auto text-center">
+          <a
+        href="https://drive.google.com/file/d/1K0Ws07l8TEqvhAKk3sRjyCF5I-3dSaaH/view?usp=sharing"
+        target="_blank"
+        rel="noopener noreferrer"
+          >
+        <img
+          src="/assets/download app.png"
+          alt="Download কথাকুঞ্জ Android App"
+          className="w-full max-w-5xl mx-auto"
+        />
+          </a>
+          <a
+        href="https://drive.google.com/file/d/1K0Ws07l8TEqvhAKk3sRjyCF5I-3dSaaH/view?usp=sharing"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-block mt-8"
+          >
+        <button
+          className={`px-10 py-4 rounded-2xl font-bold text-lg shadow-2xl bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 text-white transition-all duration-300 hover:scale-105 hover:shadow-pink-500/40 focus:outline-none focus:ring-4 focus:ring-pink-300 relative glow-download-btn ${fontClass}`}
+          style={{
+            boxShadow:
+          "0 0 16px 4px rgba(236, 72, 153, 0.4), 0 0 32px 8px rgba(139, 92, 246, 0.2)",
+          }}
+        >
+          <span className="drop-shadow-lg">
+            {language === 'en' ? 'Download' : 'ডাউনলোড'}
+          </span>
+        </button>
+        <style>
+          {`
+            .glow-download-btn {
+          box-shadow: 0 0 16px 4px rgba(236, 72, 153, 0.4), 0 0 32px 8px rgba(139, 92, 246, 0.2);
+            }
+            .glow-download-btn:hover {
+          box-shadow: 0 0 32px 8px rgba(236, 72, 153, 0.6), 0 0 48px 16px rgba(139, 92, 246, 0.3);
+            }
+          `}
+        </style>
+          </a>
         </div>
       </div>
 

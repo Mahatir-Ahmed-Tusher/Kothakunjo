@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { MessageCircle, Search, Info, Settings, Menu, X, Sun, Moon, Globe, LogIn, BookOpen } from 'lucide-react';
+import { MessageCircle, Search, Info, Settings, Menu, X, Sun, Moon, Globe, LogIn, BookOpen, Home } from 'lucide-react';
 import { useApp } from '../contexts/AppContext';
 
 const Navigation: React.FC = () => {
@@ -14,7 +14,7 @@ const Navigation: React.FC = () => {
   const navItems = [
     { 
       to: '/', 
-      icon: MessageCircle, 
+      icon: Home, 
       label: getText('Home', 'হোম'),
       isActive: location.pathname === '/'
     },

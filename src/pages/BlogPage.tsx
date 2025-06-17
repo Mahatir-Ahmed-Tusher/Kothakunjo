@@ -13,6 +13,7 @@ interface BlogPost {
   category: string;
   tags: string[];
   image: string;
+  pageName: string; // নতুন প্রোপার্টি: পৃষ্ঠার নাম
 }
 
 const BlogPage: React.FC = () => {
@@ -36,11 +37,12 @@ const BlogPage: React.FC = () => {
         'কৃত্রিম বুদ্ধিমত্তা প্রাকৃতিক ভাষা প্রক্রিয়াকরণে উল্লেখযোগ্য অগ্রগতি করেছে, এবং বাংলা ভাষা প্রক্রিয়াকরণও এর ব্যতিক্রম নয়...'
       ),
       author: getText('Dr. Rahman', 'ড. রহমান'),
-      date: getText('March 15, 2024', '১৫ মার্চ, ২০২ৄ'),
+      date: getText('March 15, 2024', '১৫ মার্চ, ২০২৪'),
       readTime: getText('5 min read', '৫ মিনিট পড়া'),
       category: getText('Technology', 'প্রযুক্তি'),
       tags: ['AI', 'Bengali', 'NLP'],
-      image: 'https://images.pexels.com/photos/8386440/pexels-photo-8386440.jpeg?auto=compress&cs=tinysrgb&w=800'
+      image: 'https://images.pexels.com/photos/8386440/pexels-photo-8386440.jpeg?auto=compress&cs=tinysrgb&w=800',
+      pageName: 'BlogPostAIProcessing'
     },
     {
       id: '2',
@@ -58,7 +60,8 @@ const BlogPage: React.FC = () => {
       readTime: getText('7 min read', '৭ মিনিট পড়া'),
       category: getText('Research', 'গবেষণা'),
       tags: ['Inclusion', 'Community', 'AI Ethics'],
-      image: 'https://images.pexels.com/photos/3861969/pexels-photo-3861969.jpeg?auto=compress&cs=tinysrgb&w=800'
+      image: 'https://images.pexels.com/photos/3861969/pexels-photo-3861969.jpeg?auto=compress&cs=tinysrgb&w=800',
+      pageName: 'BlogPostInclusiveAI'
     },
     {
       id: '3',
@@ -76,7 +79,8 @@ const BlogPage: React.FC = () => {
       readTime: getText('10 min read', '১০ মিনিট পড়া'),
       category: getText('Development', 'ডেভেলপমেন্ট'),
       tags: ['Development', 'Technical', 'Behind the Scenes'],
-      image: 'https://images.pexels.com/photos/1181677/pexels-photo-1181677.jpeg?auto=compress&cs=tinysrgb&w=800'
+      image: 'https://images.pexels.com/photos/1181677/pexels-photo-1181677.jpeg?auto=compress&cs=tinysrgb&w=800',
+      pageName: 'BlogPostKathaKunj'
     },
     {
       id: '4',
@@ -94,7 +98,27 @@ const BlogPage: React.FC = () => {
       readTime: getText('6 min read', '৬ মিনিট পড়া'),
       category: getText('Literature', 'সাহিত্য'),
       tags: ['Literature', 'Creative Writing', 'AI'],
-      image: 'https://images.pexels.com/photos/159711/books-bookstore-book-reading-159711.jpeg?auto=compress&cs=tinysrgb&w=800'
+      image: 'https://images.pexels.com/photos/159711/books-bookstore-book-reading-159711.jpeg?auto=compress&cs=tinysrgb&w=800',
+      pageName: 'BlogPostAILiterature'
+    },
+    {
+      id: '5',
+      title: getText('The Origin of Bengali', 'বাংলার উৎপত্তি'),
+      excerpt: getText(
+        'The history of the origin and evolution of the Bengali language, from the Indo-European family to modern Bengali.',
+        'বাংলা ভাষার উৎপত্তি ও বিবর্তনের ইতিহাস, ইন্দো-ইউরোপীয় ভাষা পরিবার থেকে আধুনিক বাংলার যাত্রা।'
+      ),
+      content: getText(
+        'The Bengali language has a rich history spanning thousands of years...',
+        'বাংলা ভাষার হাজার বছরের সমৃদ্ধ ইতিহাস রয়েছে...'
+      ),
+      author: getText('Humayun Azad', 'হুমায়ুন আজাদ'),
+      date: getText('June 12, 2025', '১২ জুন, ২০২৫'),
+      readTime: getText('8 min read', '৮ মিনিট পড়া'),
+      category: getText('Language', 'ভাষা'),
+      tags: ['Bengali Language', 'Language Evolution', 'Linguistics', 'History'],
+      image: '/assets/Origin-of-bengali.jpg',
+      pageName: 'BlogPostBengaliOrigin'
     }
   ];
 
@@ -103,7 +127,8 @@ const BlogPage: React.FC = () => {
     { id: 'technology', name: getText('Technology', 'প্রযুক্তি') },
     { id: 'research', name: getText('Research', 'গবেষণা') },
     { id: 'development', name: getText('Development', 'ডেভেলপমেন্ট') },
-    { id: 'literature', name: getText('Literature', 'সাহিত্য') }
+    { id: 'literature', name: getText('Literature', 'সাহিত্য') },
+    { id: 'language', name: getText('Language', 'ভাষা') }
   ];
 
   const filteredPosts = blogPosts.filter(post => {
@@ -227,10 +252,13 @@ const BlogPage: React.FC = () => {
                 </div>
 
                 {/* Read More Button */}
-                <button className="group/btn flex items-center gap-2 text-orange-600 dark:text-orange-400 font-semibold hover:text-orange-700 dark:hover:text-orange-300 transition-colors duration-300">
+                <a 
+                  href={`/blog/${post.pageName}`}
+                  className="group/btn flex items-center gap-2 text-orange-600 dark:text-orange-400 font-semibold hover:text-orange-700 dark:hover:text-orange-300 transition-colors duration-300"
+                >
                   {getText('Read More', 'আরও পড়ুন')}
                   <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform duration-300" />
-                </button>
+                </a>
               </div>
             </article>
           ))}
