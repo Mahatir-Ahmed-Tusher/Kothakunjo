@@ -225,7 +225,7 @@ const LandingPage: React.FC = () => {
       <div className="py-12 px-4">
         <div className="max-w-6xl mx-auto text-center">
           <a
-        href="https://drive.google.com/file/d/1K0Ws07l8TEqvhAKk3sRjyCF5I-3dSaaH/view?usp=sharing"
+        href="https://drive.google.com/file/d/1SFOvuz2ntwCk39WyWdaDeqE52hhj2O5C/view?usp=sharing"
         target="_blank"
         rel="noopener noreferrer"
           >
