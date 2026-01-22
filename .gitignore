@@ -1,0 +1,10 @@
+node_modules
+.next
+.env*
+!.env.example
+.DS_Store
+*.local
+out
+build
+dist
+guidelines

@@ -1,0 +1,70 @@
+/* Hind Siliguri Font Classes */
+.hind-siliguri-light {
+    font-family: "Hind Siliguri", sans-serif;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.hind-siliguri-regular {
+    font-family: "Hind Siliguri", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.hind-siliguri-medium {
+    font-family: "Hind Siliguri", sans-serif;
+    font-weight: 500;
+    font-style: normal;
+}
+
+.hind-siliguri-semibold {
+    font-family: "Hind Siliguri", sans-serif;
+    font-weight: 600;
+    font-style: normal;
+}
+
+.hind-siliguri-bold {
+    font-family: "Hind Siliguri", sans-serif;
+    font-weight: 700;
+    font-style: normal;
+}
+
+/* Tiro Bangla Font Classes */
+.tiro-bangla-regular {
+    font-family: "Tiro Bangla", serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.tiro-bangla-regular-italic {
+    font-family: "Tiro Bangla", serif;
+    font-weight: 400;
+    font-style: italic;
+}
+
+/* Kalpurush Font Face */
+@font-face {
+    font-family: 'Kalpurush';
+    src: url('/font/kalpurush/kalpurush.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+.font-kalpurush {
+    font-family: 'Kalpurush', sans-serif !important;
+}
+
+/* Global Font Override when Tiro is active */
+.font-tiro-active [class*="hind-siliguri-"] {
+    font-family: "Tiro Bangla", serif !important;
+}
+
+/* Override for Dinosaur Theme to use Pixelify Sans (English) and Bornomala Vintage (Bengali) in messages */
+/* Increased specificity to ensure it wins over Tiro override */
+.theme-dinosaur-active .message-content-text,
+.theme-dinosaur-active .message-content-text [class*="hind-siliguri-"],
+.theme-dinosaur-active .message-content-text p,
+.theme-dinosaur-active .message-content-text span {
+    font-family: 'Pixelify Sans', 'Bornomala Vintage', serif !important;
+}
