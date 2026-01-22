@@ -1,9 +1,10 @@
 'use client';
 
-import { Menu, Settings } from 'lucide-react';
+import { Menu, Settings, LogIn } from 'lucide-react';
 import { motion } from 'motion/react';
 import { Character } from '@/app/page';
 import Image from 'next/image';
+import { useAuth } from '@/app/context/AuthContext';
 
 interface NavbarProps {
   onToggleSidebar: () => void;
@@ -16,6 +17,7 @@ interface NavbarProps {
 }
 
 export function Navbar({ onToggleSidebar, onOpenSettings, character, themeColors, isKinnoriMode: isAyanabajiMode }: NavbarProps) {
+  const { user, loginWithGoogle } = useAuth();
   return (
     <motion.nav
       initial={{ y: -100 }}
@@ -46,8 +48,17 @@ export function Navbar({ onToggleSidebar, onOpenSettings, character, themeColors
           </h1>
         </div>
 
-        {/* Right - Settings */}
-        <div className="flex items-center gap-2">
+        {/* Right - Settings & Login */}
+        <div className="flex items-center gap-1 sm:gap-2">
+          {!user && (
+            <button
+              onClick={() => loginWithGoogle()}
+              className={`flex items-center gap-2 px-3 py-2 rounded-xl bg-gradient-to-r ${themeColors.gradient} text-white shadow-md hover:scale-105 active:scale-95 transition-all text-xs md:text-sm font-bold`}
+            >
+              <LogIn className="size-3.5 md:size-4" />
+              লগইন
+            </button>
+          )}
           <button
             onClick={onOpenSettings}
             className={`p-2 md:p-2.5 rounded-xl hover:bg-blue-100/50 ${themeColors.text} transition-all active:scale-95`}

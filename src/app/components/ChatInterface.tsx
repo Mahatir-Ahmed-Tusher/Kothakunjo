@@ -36,10 +36,11 @@ interface ChatInterfaceProps {
   themeColors: any;
   isAyanabajiMode: boolean;
   chatId: number;
+  chatTitle: string;
   onUpdateChatTitle: (title: string) => void;
 }
 
-export function ChatInterface({ character, themeColors, isAyanabajiMode, chatId, onUpdateChatTitle }: Omit<ChatInterfaceProps, 'isLoggedIn' | 'onLogin'>) {
+export function ChatInterface({ character, themeColors, isAyanabajiMode, chatId, chatTitle, onUpdateChatTitle }: Omit<ChatInterfaceProps, 'isLoggedIn' | 'onLogin'>) {
   const { user, loginWithGoogle, logout } = useAuth();
   const [isMounted, setIsMounted] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -159,6 +160,7 @@ export function ChatInterface({ character, themeColors, isAyanabajiMode, chatId,
         try {
           const chatDocRef = doc(db, 'users', user.uid, 'chats', String(chatId));
           await setDoc(chatDocRef, {
+            title: chatTitle,
             messages: messages.map(msg => {
               // Deeply remove undefined fields while preserving Firestore-compatible types
               const sanitize = (obj: any): any => {
@@ -212,7 +214,6 @@ export function ChatInterface({ character, themeColors, isAyanabajiMode, chatId,
 
     if (!user) {
       setIsLoginPending(true);
-      loginWithGoogle();
       return;
     }
 
@@ -351,8 +352,8 @@ export function ChatInterface({ character, themeColors, isAyanabajiMode, chatId,
               <div className="relative size-20 mx-auto mb-6 drop-shadow-xl">
                 <Image src="/kothakunjo_logo.png" alt="Logo" fill className="object-contain" />
               </div>
-              <h3 className="text-2xl font-bold text-slate-800 mb-2 hind-siliguri-bold">চালিয়ে যেতে লগইন করুন</h3>
-              <p className="text-slate-500 text-sm mb-8 hind-siliguri-regular">আপনার বার্তাটি সংরক্ষিত আছে, লগইন করার পরেই এটি এআই এর কাছে পৌঁছে যাবে।</p>
+              <h3 className="text-2xl font-bold text-slate-800 mb-2 hind-siliguri-bold text-center">চালিয়ে যেতে গুগল লগইন করুন</h3>
+              <p className="text-slate-500 text-sm mb-8 hind-siliguri-regular text-center">আপনার বার্তাটি সংরক্ষিত আছে, লগইন করার পরেই এটি আয়নাবাজির কাছে পৌঁছে যাবে।</p>
               <button
                 onClick={() => loginWithGoogle()}
                 className={`w-full flex items-center justify-center gap-3 px-6 py-4 bg-gradient-to-r ${themeColors.gradient} text-white rounded-2xl font-bold shadow-lg shadow-blue-200 hover:scale-[1.02] active:scale-[0.98] transition-all`}

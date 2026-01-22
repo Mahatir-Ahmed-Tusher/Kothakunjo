@@ -9,6 +9,8 @@ import { CharacterCreation } from '@/app/components/CharacterCreation';
 import { SplashScreen } from '@/app/components/SplashScreen';
 import { AboutModal } from '@/app/components/AboutModal';
 import { useAuth } from '@/app/context/AuthContext';
+import { db } from '@/lib/firebase';
+import { collection, query, getDocs, orderBy, deleteDoc, doc, updateDoc, Timestamp } from 'firebase/firestore';
 
 export interface Character {
     name: string;
@@ -64,6 +66,51 @@ export default function Home() {
         }
         return Date.now();
     });
+
+    // Unified Cloud Sync: Fetch history from Firestore when user logs in
+    useEffect(() => {
+        if (user) {
+            const fetchCloudHistory = async () => {
+                try {
+                    const chatsRef = collection(db, 'users', user.uid, 'chats');
+                    const q = query(chatsRef, orderBy('lastUpdated', 'desc'));
+                    const querySnapshot = await getDocs(q);
+
+                    if (!querySnapshot.empty) {
+                        const cloudHistory = querySnapshot.docs.map(doc => {
+                            const data = doc.data();
+                            const lastUpdated = data.lastUpdated instanceof Timestamp ? data.lastUpdated.toDate() : new Date();
+
+                            // Simple date formatting for the sidebar
+                            const now = new Date();
+                            const isToday = lastUpdated.toDateString() === now.toDateString();
+                            const dateLabel = isToday ? 'আজ' : lastUpdated.toLocaleDateString('bn-BD');
+
+                            return {
+                                id: parseInt(doc.id),
+                                title: data.title || 'নতুন চ্যাট',
+                                date: dateLabel
+                            };
+                        });
+
+                        // Merge cloud history with local history, favoring cloud for existing IDs
+                        setChatHistory(prev => {
+                            const combined = [...cloudHistory];
+                            prev.forEach(localChat => {
+                                if (!combined.find(c => c.id === localChat.id)) {
+                                    combined.push(localChat);
+                                }
+                            });
+                            return combined.sort((a, b) => b.id - a.id);
+                        });
+                    }
+                } catch (error) {
+                    console.error("Error fetching cloud history:", error);
+                }
+            };
+            fetchCloudHistory();
+        }
+    }, [user]);
 
     // Initialize first chat if history is empty
     useEffect(() => {
@@ -137,10 +184,19 @@ export default function Home() {
 
     const themeColors = getThemeColors();
 
-    const handleDeleteChat = (id: number) => {
+    const handleDeleteChat = async (id: number) => {
         const newHistory = chatHistory.filter(chat => chat.id !== id);
         setChatHistory(newHistory);
         localStorage.removeItem(`kothakunjo_messages_${id}`);
+
+        // Sync deletion to cloud if logged in
+        if (user) {
+            try {
+                await deleteDoc(doc(db, 'users', user.uid, 'chats', String(id)));
+            } catch (error) {
+                console.error("Error deleting chat from cloud:", error);
+            }
+        }
 
         if (activeChat === id) {
             if (newHistory.length > 0) {
@@ -166,10 +222,23 @@ export default function Home() {
         setActiveChat(newId);
     };
 
-    const handleRenameChat = (id: number, newTitle: string) => {
+    const handleRenameChat = async (id: number, newTitle: string) => {
         setChatHistory(prev => prev.map(chat =>
             chat.id === id ? { ...chat, title: newTitle } : chat
         ));
+
+        // Sync rename to cloud if logged in
+        if (user) {
+            try {
+                const chatDocRef = doc(db, 'users', user.uid, 'chats', String(id));
+                await updateDoc(chatDocRef, {
+                    title: newTitle,
+                    lastUpdated: Timestamp.now()
+                });
+            } catch (error) {
+                console.error("Error renaming chat in cloud:", error);
+            }
+        }
     };
 
     const activeTheme = isAyanabajiMode ? character.theme : currentTheme;
@@ -246,6 +315,7 @@ export default function Home() {
                             themeColors={themeColors}
                             isAyanabajiMode={isAyanabajiMode}
                             chatId={activeChat}
+                            chatTitle={chatHistory.find(c => c.id === activeChat)?.title || 'নতুন চ্যাট'}
                             onUpdateChatTitle={(title: string) => {
                                 setChatHistory(prev => prev.map(c => c.id === activeChat ? { ...c, title } : c));
                             }}
