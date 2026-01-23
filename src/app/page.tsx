@@ -9,6 +9,8 @@ import { CharacterCreation } from '@/app/components/CharacterCreation';
 import { SplashScreen } from '@/app/components/SplashScreen';
 import { AboutModal } from '@/app/components/AboutModal';
 import { useAuth } from '@/app/context/AuthContext';
+import { useLanguage } from './context/LanguageContext';
+import { translations, Language } from '../lib/translations';
 import { db } from '@/lib/firebase';
 import { collection, query, getDocs, orderBy, deleteDoc, doc, updateDoc, Timestamp } from 'firebase/firestore';
 
@@ -25,6 +27,9 @@ export interface Character {
 
 export default function Home() {
     const { user, loginWithGoogle, logout } = useAuth();
+    const { language } = useLanguage();
+    const t = translations[language as Language];
+
     const isLoggedIn = !!user;
     const [showSplash, setShowSplash] = useState(true);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -42,13 +47,13 @@ export default function Home() {
     });
 
     const [character, setCharacter] = useState<Character>({
-        name: 'কথাকুঞ্জ',
+        name: t.defaultCharName,
         profilePicture: 'https://i.postimg.cc/5tCmPFPZ/image.png',
         gender: 'other',
-        role: 'এআই সহায়ক',
-        age: 'কালজয়ী',
-        history: 'একটি বন্ধুত্বপূর্ণ এবং সহায়ক এআই সহায়ক যা যেকোনো বিষয়ে সাহায্য করতে প্রস্তুত',
-        relationship: 'আপনার সহায়ক সঙ্গী',
+        role: t.defaultCharRole,
+        age: t.defaultCharAge,
+        history: t.defaultCharHistory,
+        relationship: t.defaultCharRelationship,
         theme: 'default'
     });
 
@@ -84,11 +89,11 @@ export default function Home() {
                             // Simple date formatting for the sidebar
                             const now = new Date();
                             const isToday = lastUpdated.toDateString() === now.toDateString();
-                            const dateLabel = isToday ? 'আজ' : lastUpdated.toLocaleDateString('bn-BD');
+                            const dateLabel = isToday ? t.today : lastUpdated.toLocaleDateString(language === 'bn' ? 'bn-BD' : 'en-US');
 
                             return {
                                 id: parseInt(doc.id),
-                                title: data.title || 'নতুন চ্যাট',
+                                title: data.title || t.newChat,
                                 date: dateLabel
                             };
                         });
@@ -101,7 +106,14 @@ export default function Home() {
                                     combined.push(localChat);
                                 }
                             });
-                            return combined.sort((a, b) => b.id - a.id);
+                            const sorted = combined.sort((a, b) => b.id - a.id);
+
+                            // Switch to most recent cloud chat on first login
+                            if (cloudHistory.length > 0 && activeChat !== cloudHistory[0].id) {
+                                setActiveChat(cloudHistory[0].id);
+                            }
+
+                            return sorted;
                         });
                     }
                 } catch (error) {
@@ -110,19 +122,19 @@ export default function Home() {
             };
             fetchCloudHistory();
         }
-    }, [user]);
+    }, [user, language]);
 
     // Initialize first chat if history is empty
     useEffect(() => {
         if (chatHistory.length === 0) {
             const initialId = Date.now();
-            const initialChat = { id: initialId, title: 'নতুন চ্যাট', date: 'আজ' };
+            const initialChat = { id: initialId, title: language === 'bn' ? 'নতুন চ্যাট' : 'New Chat', date: language === 'bn' ? 'আজ' : 'Today' };
             setChatHistory([initialChat]);
             setActiveChat(initialId);
             localStorage.setItem('kothakunjo_history', JSON.stringify([initialChat]));
             localStorage.setItem('kothakunjo_active_chat', initialId.toString());
         }
-    }, []);
+    }, [language]);
 
     // Save history, active chat and font to localStorage
     useEffect(() => {
@@ -203,7 +215,7 @@ export default function Home() {
                 setActiveChat(newHistory[0].id);
             } else {
                 const newId = Date.now();
-                const initialChat = { id: newId, title: 'নতুন চ্যাট', date: 'আজ' };
+                const initialChat = { id: newId, title: language === 'bn' ? 'নতুন চ্যাট' : 'New Chat', date: language === 'bn' ? 'আজ' : 'Today' };
                 setChatHistory([initialChat]);
                 setActiveChat(newId);
             }
@@ -217,7 +229,7 @@ export default function Home() {
         });
 
         const newId = Date.now();
-        const initialChat = { id: newId, title: 'নতুন চ্যাট', date: 'আজ' };
+        const initialChat = { id: newId, title: language === 'bn' ? 'নতুন চ্যাট' : 'New Chat', date: language === 'bn' ? 'আজ' : 'Today' };
         setChatHistory([initialChat]);
         setActiveChat(newId);
     };
@@ -285,7 +297,7 @@ export default function Home() {
                             }}
                             onNewChat={() => {
                                 const newId = Date.now();
-                                setChatHistory([{ id: newId, title: 'নতুন চ্যাট', date: 'আজ' }, ...chatHistory]);
+                                setChatHistory([{ id: newId, title: language === 'bn' ? 'নতুন চ্যাট' : 'New Chat', date: language === 'bn' ? 'আজ' : 'Today' }, ...chatHistory]);
                                 setActiveChat(newId);
                                 setIsSidebarOpen(false);
                             }}
@@ -304,18 +316,18 @@ export default function Home() {
                             isLoggedIn={isLoggedIn}
                             onLogout={logout}
                             isKinnoriMode={isAyanabajiMode}
-                            onToggleKinnoriMode={() => setIsAyanabajiMode(!isAyanabajiMode)}
+                            onToggleAyanabajiMode={() => setIsAyanabajiMode(!isAyanabajiMode)}
                             onDeleteChat={handleDeleteChat}
                             onDeleteAllChats={handleDeleteAllChats}
                             onRenameChat={handleRenameChat}
                         />
 
                         <ChatInterface
-                            character={isAyanabajiMode ? character : { ...character, name: 'কথাকুঞ্জ', theme: currentTheme }}
+                            character={isAyanabajiMode ? character : { ...character, name: language === 'bn' ? 'কথাকুঞ্জ' : 'KothaKunjo', theme: currentTheme }}
                             themeColors={themeColors}
                             isAyanabajiMode={isAyanabajiMode}
                             chatId={activeChat}
-                            chatTitle={chatHistory.find(c => c.id === activeChat)?.title || 'নতুন চ্যাট'}
+                            chatTitle={chatHistory.find(c => c.id === activeChat)?.title || (language === 'bn' ? 'নতুন চ্যাট' : 'New Chat')}
                             onUpdateChatTitle={(title: string) => {
                                 setChatHistory(prev => prev.map(c => c.id === activeChat ? { ...c, title } : c));
                             }}

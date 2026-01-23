@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import "./../styles/index.css";
+import { AuthProvider } from "./context/AuthContext";
+import { LanguageProvider } from "./context/LanguageContext";
 
 export const metadata: Metadata = {
     title: "কথাকুঞ্জ - Kothakunjo",
     description: "আপনার বন্ধুত্বপূর্ণ এআই সঙ্গী",
 };
-
-import { AuthProvider } from "./context/AuthContext";
 
 export default function RootLayout({
     children,
@@ -24,7 +24,9 @@ export default function RootLayout({
             </head>
             <body className="h-full antialiased hind-siliguri-regular">
                 <AuthProvider>
-                    {children}
+                    <LanguageProvider>
+                        {children}
+                    </LanguageProvider>
                 </AuthProvider>
             </body>
         </html>

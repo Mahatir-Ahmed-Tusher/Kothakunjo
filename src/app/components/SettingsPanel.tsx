@@ -1,10 +1,11 @@
 'use client';
 
-import { X, Palette, User, Bell, Lock, Info, Check, Sparkles, LogIn } from 'lucide-react';
+import { X, Palette, User, Bell, Lock, Info, Check, Sparkles, LogIn, Languages } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
-import { bn } from '@/lib/translations';
+import { translations, Language } from '../../lib/translations';
 import Image from 'next/image';
 import { useAuth } from '@/app/context/AuthContext';
+import { useLanguage } from '../context/LanguageContext';
 import { MemoryPanel } from './MemoryPanel';
 
 interface SettingsPanelProps {
@@ -22,12 +23,15 @@ export function SettingsPanel({ isOpen, onClose, currentTheme, onThemeChange, cu
   onOpenAbout
 }: SettingsPanelProps) {
   const { user, logout } = useAuth();
+  const { language, setLanguage } = useLanguage();
+  const t = translations[language as Language];
+
   const themes = [
-    { id: 'default', name: bn.themes.default, desc: bn.themes.defaultDesc, color: 'bg-blue-400', icon: 'https://i.postimg.cc/MG5GJ9rG/image.png' },
-    { id: 'wallflower', name: bn.themes.wallflower, desc: bn.themes.wallflowerDesc, color: 'bg-pink-400', icon: 'https://i.postimg.cc/xd694ccz/image.png' },
-    { id: 'punk-rock', name: bn.themes.punkRock, desc: bn.themes.punkRockDesc, color: 'bg-green-600', icon: 'https://i.postimg.cc/MGHGx7kQ/image.png' },
-    { id: 'okay-boomer', name: bn.themes.okayBoomer, desc: bn.themes.okayBoomerDesc, color: 'bg-gray-200', icon: 'https://i.postimg.cc/rF9yrnMC/image.png' },
-    { id: 'dinosaur', name: bn.themes.dinosaur, desc: bn.themes.dinosaurDesc, color: 'bg-amber-500', icon: 'https://i.postimg.cc/15WhSLyY/image.png' },
+    { id: 'default', name: t.themes.default, desc: t.themes.defaultDesc, color: 'bg-blue-400', icon: 'https://i.postimg.cc/MG5GJ9rG/image.png' },
+    { id: 'wallflower', name: t.themes.wallflower, desc: t.themes.wallflowerDesc, color: 'bg-pink-400', icon: 'https://i.postimg.cc/xd694ccz/image.png' },
+    { id: 'punk-rock', name: t.themes.punkRock, desc: t.themes.punkRockDesc, color: 'bg-green-600', icon: 'https://i.postimg.cc/MGHGx7kQ/image.png' },
+    { id: 'okay-boomer', name: t.themes.okayBoomer, desc: t.themes.okayBoomerDesc, color: 'bg-gray-200', icon: 'https://i.postimg.cc/rF9yrnMC/image.png' },
+    { id: 'dinosaur', name: t.themes.dinosaur, desc: t.themes.dinosaurDesc, color: 'bg-amber-500', icon: 'https://i.postimg.cc/15WhSLyY/image.png' },
   ];
 
   return (
@@ -63,7 +67,7 @@ export function SettingsPanel({ isOpen, onClose, currentTheme, onThemeChange, cu
                   />
                 </div>
                 <h2 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
-                  {bn.settings}
+                  {t.settings}
                 </h2>
               </div>
               <button
@@ -76,15 +80,45 @@ export function SettingsPanel({ isOpen, onClose, currentTheme, onThemeChange, cu
 
             {/* Content */}
             <div className="flex-1 overflow-y-auto p-6 space-y-8 custom-scrollbar">
+              {/* Language Selection */}
+              <div>
+                <div className="flex items-center gap-2 mb-4">
+                  <Languages className="size-5 text-emerald-600" />
+                  <h3 className="text-lg font-semibold text-slate-800">{t.language}</h3>
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <button
+                    onClick={() => setLanguage('bn')}
+                    className={`p-4 rounded-2xl flex flex-col items-center gap-2 transition-all border ${language === 'bn'
+                      ? 'bg-emerald-50 border-emerald-400 shadow-sm'
+                      : 'bg-white border-slate-100'
+                      }`}
+                  >
+                    <span className="text-base font-bold">{t.bangla}</span>
+                    {language === 'bn' && <Check className="size-4 text-emerald-600" />}
+                  </button>
+                  <button
+                    onClick={() => setLanguage('en')}
+                    className={`p-4 rounded-2xl flex flex-col items-center gap-2 transition-all border ${language === 'en'
+                      ? 'bg-emerald-50 border-emerald-400 shadow-sm'
+                      : 'bg-white border-slate-100'
+                      }`}
+                  >
+                    <span className="text-base font-bold">{t.english}</span>
+                    {language === 'en' && <Check className="size-4 text-emerald-600" />}
+                  </button>
+                </div>
+              </div>
+
               {/* Appearance */}
               <div>
                 <div className="flex items-center gap-2 mb-4">
                   <Palette className="size-5 text-blue-600" />
-                  <h3 className="text-lg font-semibold text-slate-800">{bn.appearance}</h3>
+                  <h3 className="text-lg font-semibold text-slate-800">{t.appearance}</h3>
                 </div>
                 {isAyanabajiMode && (
                   <div className="mb-4 p-3 bg-amber-50 border border-amber-200 rounded-xl text-amber-800 text-xs italic">
-                    Note: Ayanabaji mode is currently active. Switch to Normal mode to see your selected custom theme.
+                    {t.ayanabajiActiveNote}
                   </div>
                 )}
                 <div className="space-y-3">
@@ -94,7 +128,7 @@ export function SettingsPanel({ isOpen, onClose, currentTheme, onThemeChange, cu
                       onClick={() => onThemeChange(theme.id as any)}
                       className={`w-full p-4 rounded-2xl flex items-center justify-between transition-all border ${currentTheme === theme.id
                         ? 'bg-blue-50 border-blue-400 shadow-sm'
-                        : 'bg-white border-slate-100 hover:border-blue-200 hover:shadow-md'
+                        : 'bg-white border-slate-100'
                         }`}
                     >
                       <div className="flex items-center gap-4">
@@ -118,14 +152,14 @@ export function SettingsPanel({ isOpen, onClose, currentTheme, onThemeChange, cu
               <div>
                 <div className="flex items-center gap-2 mb-4">
                   <Palette className="size-5 text-purple-600" />
-                  <h3 className="text-lg font-semibold text-slate-800">Font Selection</h3>
+                  <h3 className="text-lg font-semibold text-slate-800">{t.fontSelection}</h3>
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                   <button
                     onClick={() => onFontChange('hind')}
                     className={`p-4 rounded-2xl flex flex-col items-center gap-2 transition-all border ${currentFont === 'hind'
                       ? 'bg-blue-50 border-blue-400 shadow-sm'
-                      : 'bg-white border-slate-100 hover:border-blue-200'
+                      : 'bg-white border-slate-100'
                       }`}
                   >
                     <span className="text-xl font-bold hind-siliguri-bold">অ</span>
@@ -136,7 +170,7 @@ export function SettingsPanel({ isOpen, onClose, currentTheme, onThemeChange, cu
                     onClick={() => onFontChange('tiro')}
                     className={`p-4 rounded-2xl flex flex-col items-center gap-2 transition-all border ${currentFont === 'tiro'
                       ? 'bg-purple-50 border-purple-400 shadow-sm'
-                      : 'bg-white border-slate-100 hover:border-purple-200'
+                      : 'bg-white border-slate-100'
                       }`}
                   >
                     <span className="text-xl font-bold tiro-bangla-regular">অ</span>
@@ -150,7 +184,7 @@ export function SettingsPanel({ isOpen, onClose, currentTheme, onThemeChange, cu
               <div>
                 <div className="flex items-center gap-2 mb-4">
                   <Sparkles className="size-5 text-indigo-600" />
-                  <h3 className="text-lg font-semibold text-slate-800">ব্যক্তিগতকরণ (Personalization)</h3>
+                  <h3 className="text-lg font-semibold text-slate-800">{t.personalization}</h3>
                 </div>
                 <MemoryPanel />
               </div>
@@ -159,7 +193,7 @@ export function SettingsPanel({ isOpen, onClose, currentTheme, onThemeChange, cu
               <div>
                 <div className="flex items-center gap-2 mb-4">
                   <User className="size-5 text-blue-600" />
-                  <h3 className="text-lg font-semibold text-slate-800">{bn.account}</h3>
+                  <h3 className="text-lg font-semibold text-slate-800">{t.account}</h3>
                 </div>
                 <div className="space-y-2">
                   <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 flex items-center gap-3">
@@ -171,7 +205,7 @@ export function SettingsPanel({ isOpen, onClose, currentTheme, onThemeChange, cu
                       />
                     </div>
                     <div>
-                      <div className="text-[10px] text-slate-400 uppercase font-bold tracking-wider mb-0.5">{bn.email}</div>
+                      <div className="text-[10px] text-slate-400 uppercase font-bold tracking-wider mb-0.5">{t.email}</div>
                       <div className="font-bold text-slate-700 text-sm">{user?.email || 'Guest User'}</div>
                     </div>
                   </div>
@@ -184,8 +218,8 @@ export function SettingsPanel({ isOpen, onClose, currentTheme, onThemeChange, cu
                         <LogIn className="size-5 rotate-180" />
                       </div>
                       <div className="text-left">
-                        <div className="text-sm">লগ আউট করুন</div>
-                        <div className="text-[10px] opacity-70 font-medium">আপনার সেশন শেষ করুন</div>
+                        <div className="text-sm">{t.logout}</div>
+                        <div className="text-[10px] opacity-70 font-medium">{t.logoutDesc}</div>
                       </div>
                     </button>
                   )}
@@ -196,14 +230,14 @@ export function SettingsPanel({ isOpen, onClose, currentTheme, onThemeChange, cu
               <div>
                 <div className="flex items-center gap-2 mb-4">
                   <Info className="size-5 text-blue-600" />
-                  <h3 className="text-lg font-semibold text-slate-800">{bn.about}</h3>
+                  <h3 className="text-lg font-semibold text-slate-800">{t.about}</h3>
                 </div>
                 <button
                   onClick={onOpenAbout}
                   className="w-full text-left p-5 rounded-2xl bg-gradient-to-br from-blue-600 to-cyan-700 text-white shadow-xl relative overflow-hidden group active:scale-[0.98] transition-all"
                 >
                   <div className="relative z-10">
-                    <h4 className="font-bold text-xl mb-1">{bn.appName}</h4>
+                    <h4 className="font-bold text-xl mb-1">{t.appName}</h4>
                     <p className="text-blue-100 text-xs mb-4">Version 3.0.0 (2026 Update)</p>
 
                   </div>
@@ -215,22 +249,22 @@ export function SettingsPanel({ isOpen, onClose, currentTheme, onThemeChange, cu
               <div>
                 <div className="flex items-center gap-2 mb-4">
                   <Lock className="size-5 text-blue-600" />
-                  <h3 className="text-lg font-semibold text-slate-800">{bn.privacySecurity}</h3>
+                  <h3 className="text-lg font-semibold text-slate-800">{t.privacySecurity}</h3>
                 </div>
                 <div className="space-y-2">
                   <button
                     onClick={() => {
-                      if (confirm('Are you sure you want to clear all chat history?')) {
-                        localStorage.removeItem('kothakunjo_messages');
+                      if (confirm(t.confirmClearHistory)) {
+                        localStorage.removeItem('kothakunjo_history');
                         window.location.reload();
                       }
                     }}
                     className="w-full p-4 rounded-2xl hover:bg-slate-50 text-slate-700 text-left transition-all font-medium border border-transparent hover:border-slate-200"
                   >
-                    {bn.clearChatHistory}
+                    {t.clearChatHistory}
                   </button>
                   <button className="w-full p-4 rounded-2xl hover:bg-red-50 text-red-500 text-left transition-all font-bold border border-transparent hover:border-red-100">
-                    {bn.deleteAccount}
+                    {t.deleteAccount}
                   </button>
                 </div>
               </div>
@@ -239,7 +273,7 @@ export function SettingsPanel({ isOpen, onClose, currentTheme, onThemeChange, cu
             {/* Footer */}
             <div className="p-6 border-t border-slate-100 bg-white shadow-[0_-10px_20px_rgba(0,0,0,0.02)]">
               <div className="text-[10px] text-slate-400 text-center font-bold uppercase tracking-[0.2em]">
-                Made with 💙 by Kothakunjo Team
+                {t.madeBy}
               </div>
             </div>
           </motion.div>

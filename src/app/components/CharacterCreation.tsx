@@ -3,8 +3,8 @@
 import { useState, useRef } from 'react';
 import { ArrowLeft, Upload, User, Briefcase, Calendar, BookOpen, Heart, Palette, Sparkles, Check, Camera, Image as ImageIcon } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Character } from '@/app/page';
-import { bn } from '@/lib/translations';
+import { translations, Language } from '../../lib/translations';
+import { useLanguage } from '../context/LanguageContext';
 import Image from 'next/image';
 
 interface CharacterCreationProps {
@@ -15,16 +15,18 @@ interface CharacterCreationProps {
 }
 
 const themes = [
-  { id: 'default' as const, name: bn.themes.default, desc: bn.themes.defaultDesc, colors: 'from-blue-400 to-cyan-500', icon: 'https://i.postimg.cc/MG5GJ9rG/image.png' },
-  { id: 'wallflower' as const, name: bn.themes.wallflower, desc: bn.themes.wallflowerDesc, colors: 'from-pink-400 to-purple-500', icon: 'https://i.postimg.cc/xd694ccz/image.png' },
-  { id: 'punk-rock' as const, name: bn.themes.punkRock, desc: bn.themes.punkRockDesc, colors: 'from-gray-700 to-green-600', icon: 'https://i.postimg.cc/MGHGx7kQ/image.png' },
-  { id: 'okay-boomer' as const, name: bn.themes.okayBoomer, desc: bn.themes.okayBoomerDesc, colors: 'from-gray-400 to-slate-600', icon: 'https://i.postimg.cc/rF9yrnMC/image.png' },
-  { id: 'dinosaur' as const, name: bn.themes.dinosaur, desc: bn.themes.dinosaurDesc, colors: 'from-amber-500 to-orange-600', icon: 'https://i.postimg.cc/15WhSLyY/image.png' },
+  { id: 'default' as const, name: 'Default', colors: 'from-blue-400 to-cyan-500', icon: 'https://i.postimg.cc/MG5GJ9rG/image.png' },
+  { id: 'wallflower' as const, name: 'Wallflower', colors: 'from-pink-400 to-purple-500', icon: 'https://i.postimg.cc/xd694ccz/image.png' },
+  { id: 'punk-rock' as const, name: 'Punk Rock', colors: 'from-gray-700 to-green-600', icon: 'https://i.postimg.cc/MGHGx7kQ/image.png' },
+  { id: 'okay-boomer' as const, name: 'Okay Boomer', colors: 'from-gray-400 to-slate-600', icon: 'https://i.postimg.cc/rF9yrnMC/image.png' },
+  { id: 'dinosaur' as const, name: 'Dinosaur シ', colors: 'from-amber-500 to-orange-600', icon: 'https://i.postimg.cc/15WhSLyY/image.png' },
 ];
 
 const profileEmojis = ['🌸', '🌺', '🌻', '🌷', '🌹', '💐', '🦋', '🐱', '🦊', '🐼', '🦄', '✨', '💫', '⭐', '🌙', '☀️', '🌈', '🍦', '🍓', '🥑', '🎾', '🎨', '🎭', '🎤', '🎧', '💻', '🔮', '🚀', '💌', '🧸', '🎈'];
 
 export function CharacterCreation({ character, onSave, onBack, themeColors }: CharacterCreationProps) {
+  const { language } = useLanguage();
+  const t = translations[language as Language];
   const [formData, setFormData] = useState<Character>(character);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -37,7 +39,7 @@ export function CharacterCreation({ character, onSave, onBack, themeColors }: Ch
     const file = e.target.files?.[0];
     if (file) {
       if (file.size > 2 * 1024 * 1024) {
-        alert("অনুগ্রহ করে ২ মেগাবাইটের চেয়ে ছোট ছবি আপলোড করুন।");
+        alert(t.imageSizeError);
         return;
       }
       const reader = new FileReader();
@@ -66,7 +68,7 @@ export function CharacterCreation({ character, onSave, onBack, themeColors }: Ch
               <Image src="/kothakunjo_logo.png" alt="Logo" fill className="object-contain" />
             </div>
             <h1 className="font-bold text-xl sm:text-2xl bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent hind-siliguri-bold">
-              {bn.characterCreation}
+              {t.characterCreation}
             </h1>
           </div>
           <div className="w-10" />
@@ -121,8 +123,8 @@ export function CharacterCreation({ character, onSave, onBack, themeColors }: Ch
                 />
               </div>
               <div className="text-center">
-                <h3 className="font-bold text-slate-800 text-lg hind-siliguri-semibold">{bn.profilePicture}</h3>
-                <p className="text-slate-400 text-sm hind-siliguri-regular">{bn.clickToChange}</p>
+                <h3 className="font-bold text-slate-800 text-lg hind-siliguri-semibold">{t.profilePicture}</h3>
+                <p className="text-slate-400 text-sm hind-siliguri-regular">{t.clickToChange}</p>
               </div>
             </div>
 
@@ -136,7 +138,7 @@ export function CharacterCreation({ character, onSave, onBack, themeColors }: Ch
                 >
                   <div className="flex items-center gap-2 mb-4 text-slate-500 text-sm font-bold hind-siliguri-medium uppercase tracking-wider">
                     <Sparkles className="size-4 text-pink-500" />
-                    ইমোজি পছন্দ করুন
+                    {t.chooseEmoji}
                   </div>
                   <div className="grid grid-cols-6 sm:grid-cols-8 gap-3 overflow-hidden">
                     {profileEmojis.map((emoji) => (
@@ -169,14 +171,14 @@ export function CharacterCreation({ character, onSave, onBack, themeColors }: Ch
             <div>
               <label className="flex items-center gap-2 mb-3 text-slate-700 font-bold hind-siliguri-medium">
                 <User className="size-4 text-pink-500" />
-                {bn.name}
+                {t.name}
               </label>
               <input
                 type="text"
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 className="w-full px-5 py-4 rounded-2xl bg-slate-50 border border-slate-100 focus:bg-white focus:border-pink-300 focus:ring-4 ring-pink-500/5 focus:outline-none text-slate-800 transition-all hind-siliguri-regular"
-                placeholder={bn.enterName}
+                placeholder={t.enterName}
               />
             </div>
 
@@ -184,7 +186,7 @@ export function CharacterCreation({ character, onSave, onBack, themeColors }: Ch
             <div>
               <label className="flex items-center gap-2 mb-3 text-slate-700 font-bold hind-siliguri-medium">
                 <User className="size-4 text-pink-500" />
-                {bn.gender}
+                {t.gender}
               </label>
               <div className="grid grid-cols-3 gap-3">
                 {(['female', 'male', 'other'] as const).map((gender) => (
@@ -196,7 +198,7 @@ export function CharacterCreation({ character, onSave, onBack, themeColors }: Ch
                       : 'bg-white border-slate-100 text-slate-500 hover:border-pink-200'
                       }`}
                   >
-                    {gender === 'female' ? bn.female : gender === 'male' ? bn.male : bn.other}
+                    {gender === 'female' ? t.female : gender === 'male' ? t.male : t.other}
                   </button>
                 ))}
               </div>
@@ -207,27 +209,27 @@ export function CharacterCreation({ character, onSave, onBack, themeColors }: Ch
               <div>
                 <label className="flex items-center gap-2 mb-3 text-slate-700 font-bold hind-siliguri-medium">
                   <Briefcase className="size-4 text-pink-500" />
-                  {bn.role}
+                  {t.role}
                 </label>
                 <input
                   type="text"
                   value={formData.role}
                   onChange={(e) => setFormData({ ...formData, role: e.target.value })}
                   className="w-full px-5 py-4 rounded-2xl bg-slate-50 border border-slate-100 focus:bg-white focus:border-pink-300 focus:outline-none text-slate-800 transition-all hind-siliguri-regular"
-                  placeholder={bn.roleExample}
+                  placeholder={t.roleExample}
                 />
               </div>
               <div>
                 <label className="flex items-center gap-2 mb-3 text-slate-700 font-bold hind-siliguri-medium">
                   <Calendar className="size-4 text-pink-500" />
-                  {bn.age}
+                  {t.age}
                 </label>
                 <input
                   type="text"
                   value={formData.age}
                   onChange={(e) => setFormData({ ...formData, age: e.target.value })}
                   className="w-full px-5 py-4 rounded-2xl bg-slate-50 border border-slate-100 focus:bg-white focus:border-pink-300 focus:outline-none text-slate-800 transition-all hind-siliguri-regular"
-                  placeholder={bn.enterAge}
+                  placeholder={t.enterAge}
                 />
               </div>
             </div>
@@ -243,27 +245,27 @@ export function CharacterCreation({ character, onSave, onBack, themeColors }: Ch
             <div>
               <label className="flex items-center gap-2 mb-3 text-slate-700 font-bold hind-siliguri-medium">
                 <BookOpen className="size-4 text-pink-500" />
-                {bn.history}
+                {t.history}
               </label>
               <textarea
                 value={formData.history}
                 onChange={(e) => setFormData({ ...formData, history: e.target.value })}
                 rows={4}
                 className="w-full px-5 py-4 rounded-2xl bg-slate-50 border border-slate-100 focus:bg-white focus:border-pink-300 focus:outline-none text-slate-800 transition-all resize-none hind-siliguri-regular"
-                placeholder={bn.historyPlaceholder}
+                placeholder={t.historyPlaceholder}
               />
             </div>
             <div>
               <label className="flex items-center gap-2 mb-3 text-slate-700 font-bold hind-siliguri-medium">
                 <Heart className="size-4 text-pink-500" />
-                {bn.relationship}
+                {t.relationship}
               </label>
               <textarea
                 value={formData.relationship}
                 onChange={(e) => setFormData({ ...formData, relationship: e.target.value })}
                 rows={3}
                 className="w-full px-5 py-4 rounded-2xl bg-slate-50 border border-slate-100 focus:bg-white focus:border-pink-300 focus:outline-none text-slate-800 transition-all resize-none hind-siliguri-regular"
-                placeholder={bn.relationshipPlaceholder}
+                placeholder={t.relationshipPlaceholder}
               />
             </div>
           </motion.div>
@@ -277,7 +279,7 @@ export function CharacterCreation({ character, onSave, onBack, themeColors }: Ch
           >
             <div className="flex items-center gap-2 mb-6 text-slate-700 font-bold hind-siliguri-medium">
               <Palette className="size-5 text-pink-500" />
-              {bn.chooseTheme}
+              {t.chooseTheme}
             </div>
             <div className="space-y-4">
               {themes.map((theme) => (
@@ -320,7 +322,7 @@ export function CharacterCreation({ character, onSave, onBack, themeColors }: Ch
             className="w-full py-5 rounded-3xl bg-gradient-to-r from-pink-500 to-purple-600 text-white font-bold text-lg sm:text-xl hover:shadow-[0_20px_40px_rgba(236,72,153,0.3)] transition-all active:scale-95 flex items-center justify-center gap-3 group hind-siliguri-bold"
           >
             <Sparkles className="size-6 group-hover:rotate-12 transition-transform" />
-            {bn.startChatting}
+            {t.startChatting}
           </motion.button>
         </div>
       </div>

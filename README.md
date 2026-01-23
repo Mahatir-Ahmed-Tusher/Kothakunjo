@@ -51,7 +51,6 @@ src/
     └── fonts.css       # Custom font-face and theme-specific overrides
 ```
 
-build command while deploying: npm install --legacy-peer-deps
 ## 👨‍💻 Founder & Developer
 
 **Mahatir Ahmed Tusher**  

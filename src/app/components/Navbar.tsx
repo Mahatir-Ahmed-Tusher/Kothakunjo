@@ -5,6 +5,8 @@ import { motion } from 'motion/react';
 import { Character } from '@/app/page';
 import Image from 'next/image';
 import { useAuth } from '@/app/context/AuthContext';
+import { useLanguage } from '../context/LanguageContext';
+import { translations, Language } from '../../lib/translations';
 
 interface NavbarProps {
   onToggleSidebar: () => void;
@@ -18,6 +20,9 @@ interface NavbarProps {
 
 export function Navbar({ onToggleSidebar, onOpenSettings, character, themeColors, isKinnoriMode: isAyanabajiMode }: NavbarProps) {
   const { user, loginWithGoogle } = useAuth();
+  const { language } = useLanguage();
+  const t = translations[language as Language];
+
   return (
     <motion.nav
       initial={{ y: -100 }}
@@ -28,7 +33,7 @@ export function Navbar({ onToggleSidebar, onOpenSettings, character, themeColors
         {/* Left - Menu Button */}
         <button
           onClick={onToggleSidebar}
-          className={`p-2 md:p-2.5 rounded-xl hover:bg-blue-100/50 ${themeColors.text} transition-all active:scale-95`}
+          className={`p-2 md:p-2.5 rounded-xl ${themeColors.text} transition-all active:scale-95`}
         >
           <Menu className="size-5 md:size-6" />
         </button>
@@ -43,8 +48,8 @@ export function Navbar({ onToggleSidebar, onOpenSettings, character, themeColors
               className="object-contain"
             />
           </div>
-          <h1 className={`font-bold text-lg md:text-xl bg-gradient-to-r ${themeColors.gradient} bg-clip-text text-transparent hind-siliguri-semibold`}>
-            {isAyanabajiMode ? character.name : 'কথাকুঞ্জ'}
+          <h1 className={`font-bold text-lg md:text-xl bg-gradient-to-r ${themeColors.gradient} bg-clip-text text-transparent`}>
+            {isAyanabajiMode ? character.name : t.appName}
           </h1>
         </div>
 
@@ -53,15 +58,15 @@ export function Navbar({ onToggleSidebar, onOpenSettings, character, themeColors
           {!user && (
             <button
               onClick={() => loginWithGoogle()}
-              className={`flex items-center gap-2 px-3 py-2 rounded-xl bg-gradient-to-r ${themeColors.gradient} text-white shadow-md hover:scale-105 active:scale-95 transition-all text-xs md:text-sm font-bold`}
+              className={`flex items-center gap-2 px-3 py-2 rounded-xl bg-gradient-to-r ${themeColors.gradient} text-white shadow-md active:scale-95 transition-all text-xs md:text-sm font-bold`}
             >
               <LogIn className="size-3.5 md:size-4" />
-              লগইন
+              {t.login}
             </button>
           )}
           <button
             onClick={onOpenSettings}
-            className={`p-2 md:p-2.5 rounded-xl hover:bg-blue-100/50 ${themeColors.text} transition-all active:scale-95`}
+            className={`p-2 md:p-2.5 rounded-xl ${themeColors.text} transition-all active:scale-95`}
           >
             <Settings className="size-4 md:size-5" />
           </button>

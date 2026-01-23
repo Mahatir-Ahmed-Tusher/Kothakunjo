@@ -1,8 +1,10 @@
 'use client';
 
-import { X, Heart, Globe, Sparkles } from 'lucide-react';
+import { X, Globe, Sparkles } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import Image from 'next/image';
+import { useLanguage } from '../context/LanguageContext';
+import { translations, Language } from '../../lib/translations';
 
 interface AboutModalProps {
     isOpen: boolean;
@@ -10,6 +12,11 @@ interface AboutModalProps {
 }
 
 export function AboutModal({ isOpen, onClose }: AboutModalProps) {
+    const { language } = useLanguage();
+    const t = translations[language as Language];
+
+    const c = t.aboutContent;
+
     return (
         <AnimatePresence>
             {isOpen && (
@@ -56,9 +63,9 @@ export function AboutModal({ isOpen, onClose }: AboutModalProps) {
                                     initial={{ y: 20, opacity: 0 }}
                                     animate={{ y: 0, opacity: 1 }}
                                     transition={{ delay: 0.3 }}
-                                    className="text-3xl font-bold hind-siliguri-bold tracking-tight"
+                                    className="text-3xl font-bold tracking-tight"
                                 >
-                                    কথাকুঞ্জ
+                                    {t.appName}
                                 </motion.h2>
                                 <motion.p
                                     initial={{ opacity: 0 }}
@@ -80,40 +87,30 @@ export function AboutModal({ isOpen, onClose }: AboutModalProps) {
 
                         {/* Content Section */}
                         <div className="flex-1 overflow-y-auto p-6 sm:p-10 custom-scrollbar">
-                            <div className="space-y-6 text-slate-700 leading-relaxed hind-siliguri-regular text-lg">
-                                <p>
-                                    কথাকুঞ্জ হলো আপনার আমার মতোই বাংলায় সাবলীল, প্রাঞ্জল একটা চ্যাটবট। ধরে নিন, আপনার কোনো অনলাইনের বন্ধু, যার সাথে আপনি কখনো আড্ডা দেবেন নিজের জীবনের সুখ, দুঃখ নিয়ে। কিংবা মাঝে মাঝে মেতে যাবেন প্রযুক্তি, রাজনীতি, দর্শন, বিজ্ঞান ইত্যাদি নার্ডি সব বিষয় নিয়ে।
-                                </p>
+                            <div className="space-y-6 text-slate-700 leading-relaxed text-lg">
+                                <p>{c.p1}</p>
 
                                 <div className="flex items-start gap-4 p-4 rounded-2xl bg-blue-50/50 border border-blue-100">
                                     <Globe className="size-6 text-blue-600 mt-1 shrink-0" />
-                                    <p className="text-base text-blue-900/80">
-                                        সাধারণত ইংরেজিতে ভালো কাজ করে, এমন এআই মডেল আছে অনেক। কিন্তু বাংলা ভাষার জন্য ডেডিকেটেড এমন এআই চ্যাটবট নেই বললেই চলে। এ সমস্যা নিসরণের উদ্দ্যেশ্যেই আমি মাহাথির আহমেদ তুষার ভাষার মাস কে শ্রদ্ধা জানিয়ে এ উদ্যোগ নিয়েছি।
-                                    </p>
+                                    <p className="text-base text-blue-900/80">{c.p2}</p>
                                 </div>
 
-                                <p>
-                                    এটা খুবই স্বাভাবিক যে, আপনি বাঙালী হওয়া সত্ত্বেও কথাকুঞ্জ শব্দটির অর্থ জানেন না এখনও। কথাকুঞ্জ শব্দটি কথা এবং কুঞ্জ- এই দুই শব্দের সমন্বয়ে গঠিত। কথা শব্দের অর্থ হলো বচন, গল্প, আখ্যান। আর কুঞ্জ অর্থ লতাদি দ্বারা আচ্ছাদিত গৃহাকার স্থান; লতাগৃহ, উপবন ইত্যাদি বোঝায়। দুটো মিলিয়ে বোঝায়, যেখানে সম্ভার ঘটেছে কথার।
-                                </p>
+                                <p>{c.p3}</p>
 
                                 <div className="flex items-start gap-4 p-4 rounded-2xl bg-cyan-50/50 border border-cyan-100">
                                     <Sparkles className="size-6 text-cyan-600 mt-1 shrink-0" />
-                                    <p className="text-base text-cyan-900/80">
-                                        এই কৃত্রিম বুদ্ধিমত্তা আপনার সাথে কথা বলবে, আপনার কথা শুনবে। আপনাকে গল্প শোনাবে, ইতিহাস, বিজ্ঞান, দর্শন, সাহিত্য শেখাবে। এবং সেটা আপনার মায়ের ভাষায়। মধুর ভাষায়।
-                                    </p>
+                                    <p className="text-base text-cyan-900/80">{c.p4}</p>
                                 </div>
 
                                 <div className="space-y-2">
                                     <div className="h-px bg-slate-100 w-full" />
-                                    <p className="text-sm font-semibold text-slate-400 uppercase tracking-wider">Our Vision</p>
-                                    <p>
-                                        আমরা এমন এক ভবিষ্যতের স্বপ্ন দেখি, যেখানে একজন বাংলা ভাষাভাষী মানুষ—সে যেখানেই থাকুক কিংবা যেকোনো প্রযুক্তিগত জ্ঞানের স্তরেই থাকুক—সহজেই এমন এক AI-এর সঙ্গে কথা বলতে পারবে, যে তার ভাষা বোঝে, তার সংস্কৃতি জানে, এবং তার বাস্তবতা বুঝে সাড়া দিতে পারে। কথাকুঞ্জ সেই অন্তর্ভুক্তিমূলক ও সহজলভ্য প্রযুক্তির দিকেই আমাদের এগিয়ে যাওয়া।
-                                    </p>
+                                    <p className="text-sm font-semibold text-slate-400 uppercase tracking-wider">{c.visionLabel}</p>
+                                    <p>{c.vision}</p>
                                 </div>
 
                                 <div className="space-y-4 pt-4">
                                     <div className="h-px bg-slate-100 w-full" />
-                                    <p className="text-sm font-semibold text-slate-400 uppercase tracking-wider">Founder & Developer</p>
+                                    <p className="text-sm font-semibold text-slate-400 uppercase tracking-wider">{c.founder}</p>
                                     <div className="flex flex-col gap-2 text-base">
                                         <p className="font-bold text-slate-900">Mahatir Ahmed Tusher</p>
                                         <div className="flex flex-col gap-1 text-slate-600">

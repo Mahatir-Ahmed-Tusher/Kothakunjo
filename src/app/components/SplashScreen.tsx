@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import Image from 'next/image';
+import { useLanguage } from '../context/LanguageContext';
+import { translations, Language } from '../../lib/translations';
 
 interface SplashScreenProps {
     onComplete: () => void;
@@ -11,6 +13,8 @@ interface SplashScreenProps {
 export function SplashScreen({ onComplete }: SplashScreenProps) {
     const [isVisible, setIsVisible] = useState(true);
     const [isMobile, setIsMobile] = useState(false);
+    const { language } = useLanguage();
+    const t = translations[language as Language];
 
     useEffect(() => {
         // Check if mobile
@@ -134,9 +138,9 @@ export function SplashScreen({ onComplete }: SplashScreenProps) {
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.6, duration: 0.6 }}
-                        className="mt-8 text-4xl font-bold text-white hind-siliguri-bold drop-shadow-lg"
+                        className="mt-8 text-4xl font-bold text-white drop-shadow-lg"
                     >
-                        কথাকুঞ্জ
+                        {t.appName}
                     </motion.h1>
 
                     {/* Tagline */}
@@ -144,9 +148,9 @@ export function SplashScreen({ onComplete }: SplashScreenProps) {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.9, duration: 0.6 }}
-                        className="mt-3 text-blue-100 hind-siliguri-regular text-lg"
+                        className="mt-3 text-blue-100 text-lg"
                     >
-                        কথা বলুন আপনারই মাতৃভাষায়
+                        {t.aiCompanion}
                     </motion.p>
 
                     {/* Loading Indicator */}
@@ -178,7 +182,7 @@ export function SplashScreen({ onComplete }: SplashScreenProps) {
                             transition={{ duration: 1.5, repeat: Infinity }}
                             className="text-xs text-white/70 font-medium uppercase tracking-widest"
                         >
-                            Loading...
+                            {t.loading}
                         </motion.p>
                     </motion.div>
 
