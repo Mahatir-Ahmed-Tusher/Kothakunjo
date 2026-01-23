@@ -3,6 +3,7 @@
 import { useState, useRef } from 'react';
 import { ArrowLeft, Upload, User, Briefcase, Calendar, BookOpen, Heart, Palette, Sparkles, Check, Camera, Image as ImageIcon } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import { Character } from '../page';
 import { translations, Language } from '../../lib/translations';
 import { useLanguage } from '../context/LanguageContext';
 import Image from 'next/image';
