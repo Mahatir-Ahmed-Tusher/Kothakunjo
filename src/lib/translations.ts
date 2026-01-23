@@ -108,16 +108,16 @@ export const translations: Record<Language, any> = {
 
         // Themes
         themes: {
-            default: 'Default',
-            defaultDesc: 'Soothing Light Blue',
-            wallflower: 'Wallflower',
-            wallflowerDesc: 'Soft pink and lavender tones',
-            punkRock: 'Punk Rock',
-            punkRockDesc: 'Dark with neon green accents',
-            okayBoomer: 'Okay Boomer',
-            okayBoomerDesc: 'Clean white/gray minimal design',
-            dinosaur: 'Dinosaur シ',
-            dinosaurDesc: '80s Eliza-style retro terminal',
+            default: 'ডিফল্ট',
+            defaultDesc: 'প্রশান্তিদায়ক হালকা নীল',
+            wallflower: 'ওয়ালফ্লাওয়ার',
+            wallflowerDesc: 'নরম গোলাপি এবং ল্যাভেন্ডার টোন',
+            punkRock: 'পাঙ্ক রক',
+            punkRockDesc: 'নিয়ন সবুজ অ্যাকসেন্ট সহ গাঢ়',
+            okayBoomer: 'ওকে বুমার',
+            okayBoomerDesc: 'পরিষ্কার সাদা/ধূসর মিনিমাল ডিজাইন',
+            dinosaur: 'ডাইনোসর シ',
+            dinosaurDesc: '৮০ দশকের এলিজা-স্টাইল রেট্রো টার্মিনাল',
         },
 
         // Plugins

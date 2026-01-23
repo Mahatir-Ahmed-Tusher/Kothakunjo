@@ -15,19 +15,20 @@ interface CharacterCreationProps {
   themeColors: any;
 }
 
-const themes = [
-  { id: 'default' as const, name: 'Default', colors: 'from-blue-400 to-cyan-500', icon: 'https://i.postimg.cc/MG5GJ9rG/image.png' },
-  { id: 'wallflower' as const, name: 'Wallflower', colors: 'from-pink-400 to-purple-500', icon: 'https://i.postimg.cc/xd694ccz/image.png' },
-  { id: 'punk-rock' as const, name: 'Punk Rock', colors: 'from-gray-700 to-green-600', icon: 'https://i.postimg.cc/MGHGx7kQ/image.png' },
-  { id: 'okay-boomer' as const, name: 'Okay Boomer', colors: 'from-gray-400 to-slate-600', icon: 'https://i.postimg.cc/rF9yrnMC/image.png' },
-  { id: 'dinosaur' as const, name: 'Dinosaur シ', colors: 'from-amber-500 to-orange-600', icon: 'https://i.postimg.cc/15WhSLyY/image.png' },
-];
 
 const profileEmojis = ['🌸', '🌺', '🌻', '🌷', '🌹', '💐', '🦋', '🐱', '🦊', '🐼', '🦄', '✨', '💫', '⭐', '🌙', '☀️', '🌈', '🍦', '🍓', '🥑', '🎾', '🎨', '🎭', '🎤', '🎧', '💻', '🔮', '🚀', '💌', '🧸', '🎈'];
 
 export function CharacterCreation({ character, onSave, onBack, themeColors }: CharacterCreationProps) {
   const { language } = useLanguage();
   const t = translations[language as Language];
+
+  const themes = [
+    { id: 'default' as const, name: t.themes.default, desc: t.themes.defaultDesc, colors: 'from-blue-400 to-cyan-500', icon: 'https://i.postimg.cc/MG5GJ9rG/image.png' },
+    { id: 'wallflower' as const, name: t.themes.wallflower, desc: t.themes.wallflowerDesc, colors: 'from-pink-400 to-purple-500', icon: 'https://i.postimg.cc/xd694ccz/image.png' },
+    { id: 'punk-rock' as const, name: t.themes.punkRock, desc: t.themes.punkRockDesc, colors: 'from-gray-700 to-green-600', icon: 'https://i.postimg.cc/MGHGx7kQ/image.png' },
+    { id: 'okay-boomer' as const, name: t.themes.okayBoomer, desc: t.themes.okayBoomerDesc, colors: 'from-gray-400 to-slate-600', icon: 'https://i.postimg.cc/rF9yrnMC/image.png' },
+    { id: 'dinosaur' as const, name: t.themes.dinosaur, desc: t.themes.dinosaurDesc, colors: 'from-amber-500 to-orange-600', icon: 'https://i.postimg.cc/15WhSLyY/image.png' },
+  ];
   const [formData, setFormData] = useState<Character>(character);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
